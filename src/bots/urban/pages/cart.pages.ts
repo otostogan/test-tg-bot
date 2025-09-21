@@ -28,11 +28,18 @@ export const cartPages: IBotPage[] = [
                 ),
             };
         },
-        validate: (val) =>
-            typeof val === 'string' &&
-            [BUTTONS.mainMenu, BUTTONS.clearCart, BUTTONS.checkout].includes(
-                val.trim(),
-            ),
+        validate: (val) => {
+            const valid =
+                typeof val === 'string' &&
+                [
+                    BUTTONS.mainMenu,
+                    BUTTONS.clearCart,
+                    BUTTONS.checkout,
+                ].includes(val.trim());
+            return {
+                valid,
+            };
+        },
         onValid: (ctx) => {
             const session = ensureSession(ctx);
             const answer = String(ctx.session?.['cart-overview'] ?? '').trim();
@@ -63,9 +70,14 @@ export const cartPages: IBotPage[] = [
                 options: { parse_mode: 'Markdown' },
             };
         },
-        validate: (val) =>
-            typeof val === 'string' &&
-            [BUTTONS.mainMenu, BUTTONS.viewCatalog].includes(val.trim()),
+        validate: (val) => {
+            const valid =
+                typeof val === 'string' &&
+                [BUTTONS.mainMenu, BUTTONS.viewCatalog].includes(val.trim());
+            return {
+                valid,
+            };
+        },
         next: (ctx) => {
             const answer = String(
                 ctx.session?.['order-confirmation'] ?? '',

@@ -6,9 +6,17 @@ export const resetPages: IBotPage[] = [
     {
         id: 'reset-confirm',
         content: '⚠️ Уверены, что хотите стереть профиль и начать заново?',
-        validate: (val) =>
-            typeof val === 'string' &&
-            [BUTTONS.confirmReset, BUTTONS.cancelReset].includes(val.trim()),
+        validate: (val) => {
+            const valid =
+                typeof val === 'string' &&
+                [BUTTONS.confirmReset, BUTTONS.cancelReset].includes(
+                    val.trim(),
+                );
+
+            return {
+                valid,
+            };
+        },
         onValid: (ctx) => {
             const session = ensureSession(ctx);
             const answer = String(ctx.session?.['reset-confirm'] ?? '').trim();

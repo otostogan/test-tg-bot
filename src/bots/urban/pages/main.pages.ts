@@ -26,15 +26,21 @@ export const mainPages: IBotPage[] = [
                     .join('\n\n'),
             };
         },
-        validate: (val) =>
-            typeof val === 'string' &&
-            [
-                BUTTONS.viewCatalog,
-                BUTTONS.viewProfile,
-                BUTTONS.viewCart,
-                BUTTONS.support,
-                BUTTONS.reset,
-            ].includes(val.trim()),
+        validate: (val) => {
+            const valid =
+                typeof val === 'string' &&
+                [
+                    BUTTONS.viewCatalog,
+                    BUTTONS.viewProfile,
+                    BUTTONS.viewCart,
+                    BUTTONS.support,
+                    BUTTONS.reset,
+                ].includes(val.trim());
+
+            return {
+                valid,
+            };
+        },
         onValid: (ctx) => {
             const session = ensureSession(ctx);
             const answer = String(ctx.session?.['main-menu'] ?? '').trim();

@@ -13,15 +13,21 @@ export const productPages: IBotPage[] = catalogService
                     text: catalogService.formatProductCard(p),
                     options: { parse_mode: 'Markdown' },
                 }),
-                validate: (val) =>
-                    typeof val === 'string' &&
-                    [
-                        BUTTONS.addToCart,
-                        BUTTONS.backToCategory,
-                        BUTTONS.backToCategories,
-                        BUTTONS.mainMenu,
-                        BUTTONS.openCart,
-                    ].includes(val.trim()),
+                validate: (val) => {
+                    const valid =
+                        typeof val === 'string' &&
+                        [
+                            BUTTONS.addToCart,
+                            BUTTONS.backToCategory,
+                            BUTTONS.backToCategories,
+                            BUTTONS.mainMenu,
+                            BUTTONS.openCart,
+                        ].includes(val.trim());
+
+                    return {
+                        valid,
+                    };
+                },
                 onValid: (ctx) => {
                     const session = ensureSession(ctx);
                     const answer = String(

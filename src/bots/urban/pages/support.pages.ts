@@ -11,9 +11,15 @@ export const supportPages: IBotPage[] = [
                 'Телефон: +7 (999) 777-45-45',
             ].join('\n'),
         }),
-        validate: (val) =>
-            typeof val === 'string' &&
-            [BUTTONS.mainMenu, BUTTONS.viewCatalog].includes(val.trim()),
+        validate: (val) => {
+            const valid =
+                typeof val === 'string' &&
+                [BUTTONS.mainMenu, BUTTONS.viewCatalog].includes(val.trim());
+
+            return {
+                valid,
+            };
+        },
         next: (ctx) => {
             const answer = String(ctx.session?.support ?? '').trim();
             return answer === BUTTONS.viewCatalog

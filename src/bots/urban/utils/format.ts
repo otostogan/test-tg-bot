@@ -1,13 +1,14 @@
 import { IUrbanMarketProfile } from '../types';
 
-export const formatProfileSummary = (profile: IUrbanMarketProfile): string =>
-    [
+export const formatProfileSummary = (profile: IUrbanMarketProfile): string => {
+    return [
         `Имя: ${profile.firstName ?? '—'}`,
         `Фамилия: ${profile.lastName ?? '—'}`,
         `Телефон: ${profile.phone ?? '—'}`,
         `Почта: ${profile.email ?? '—'}`,
         `Адрес доставки: ${profile.address ?? '—'}`,
     ].join('\n');
+};
 
 export const normalizePhoneValue = (value: unknown): string | undefined => {
     if (!value) return undefined;

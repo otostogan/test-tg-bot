@@ -42,15 +42,22 @@ export const registrationPages: IBotPage[] = [
         content: MESSAGES.registration.askPhone,
         validate: (value) => {
             if (typeof value === 'string') {
-                return /^\+?\d[\d\s\-()]{7,}$/.test(value.trim());
+                return {
+                    valid: /^\+?\d[\d\s\-()]{7,}$/.test(value.trim()),
+                };
             }
             if (value && typeof value === 'object' && 'phone_number' in value) {
-                return true;
+                return {
+                    valid: true,
+                };
             }
-            return false;
+            return {
+                valid: false,
+            };
         },
         onValid: (ctx) => {
             const profile = getProfile(ctx);
+            console.log(ctx);
             profile.phone = String(ctx.session?.phone ?? '').trim();
         },
         next: () => 'address',
@@ -67,7 +74,7 @@ export const registrationPages: IBotPage[] = [
     {
         id: 'registration-summary',
         content: (ctx) => {
-            const session = ensureSession(ctx);
+            ensureSession(ctx);
             const profile = getProfile(ctx);
             const summary = formatProfileSummary(profile);
             const greeting = profile.firstName
@@ -86,9 +93,13 @@ export const registrationPages: IBotPage[] = [
                 options: { parse_mode: 'Markdown' },
             };
         },
-        validate: (val) =>
-            typeof val === 'string' &&
-            [BUTTONS.openCatalog, BUTTONS.editProfile].includes(val.trim()),
+        validate: (val) => {
+            const valid =
+                typeof val === 'string' &&
+                [BUTTONS.openCatalog, BUTTONS.editProfile].includes(val.trim());
+
+            return { valid };
+        },
         onValid: (ctx) => {
             const session = ensureSession(ctx);
             const answer = String(

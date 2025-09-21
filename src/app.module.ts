@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { BotBuilder } from 'tg-bot-builder';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import process from 'node:process';
-import { LogModule } from 'otostogan-nest-logger';
 import { createUrbanMarketBot } from './bots/urban';
 import { DbService } from './db/db.service';
 import { DbModule } from './db/db.module';
@@ -24,18 +22,10 @@ import { DbModule } from './db/db.module';
                     );
                 }
 
-                return [
-                    createUrbanMarketBot(token, {
-                        prisma,
-                    }),
-                ];
+                return createUrbanMarketBot(token, {
+                    prisma,
+                });
             },
-        }),
-        LogModule.forRootAsync({
-            useFactory: () => ({
-                APP_NAME: 'BotBuilder',
-                LOG_PATH: `${process.cwd()}/publisher`,
-            }),
         }),
     ],
 })

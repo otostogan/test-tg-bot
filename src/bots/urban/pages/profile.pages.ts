@@ -11,11 +11,16 @@ export const profilePages: IBotPage[] = [
             const summary = formatProfileSummary(session.profile ?? {});
             return { text: `👤 Профиль:\n${summary}` };
         },
-        validate: (val) =>
-            typeof val === 'string' &&
-            [BUTTONS.mainMenu, BUTTONS.editProfile, BUTTONS.reset].includes(
-                val.trim(),
-            ),
+        validate: (val) => {
+            const valid =
+                typeof val === 'string' &&
+                [BUTTONS.mainMenu, BUTTONS.editProfile, BUTTONS.reset].includes(
+                    val.trim(),
+                );
+            return {
+                valid,
+            };
+        },
         next: (ctx) => {
             const answer = String(
                 ctx.session?.['profile-overview'] ?? '',
@@ -29,7 +34,12 @@ export const profilePages: IBotPage[] = [
     {
         id: 'address-update',
         content: '✏️ Напишите новый адрес доставки.',
-        validate: (val) => typeof val === 'string' && val.trim().length > 10,
+        validate: (val) => {
+            const valid = typeof val === 'string' && val.trim().length > 10;
+            return {
+                valid,
+            };
+        },
         onValid: (ctx) => {
             const session = ensureSession(ctx);
             const value = String(ctx.session?.['address-update'] ?? '').trim();

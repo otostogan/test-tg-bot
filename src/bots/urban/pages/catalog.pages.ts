@@ -16,12 +16,21 @@ export const catalogPages: IBotPage[] = [
             };
         },
         validate: (val) => {
-            if (typeof val !== 'string') return false;
+            if (typeof val !== 'string')
+                return {
+                    valid: false,
+                };
             const normalized = val.trim();
-            if (normalized === BUTTONS.mainMenu) return true;
-            return catalogService
+            if (normalized === BUTTONS.mainMenu)
+                return {
+                    valid: true,
+                };
+            const valid = catalogService
                 .listCategories()
                 .some((c) => c.title === normalized);
+            return {
+                valid,
+            };
         },
         next: (ctx) => {
             const answer = String(
@@ -48,17 +57,28 @@ export const catalogPages: IBotPage[] = [
             };
         },
         validate: (val) => {
-            if (typeof val !== 'string') return false;
+            if (typeof val !== 'string')
+                return {
+                    valid: false,
+                };
             const normalized = val.trim();
             if (
                 [BUTTONS.mainMenu, BUTTONS.backToCategories].includes(
                     normalized,
                 )
-            )
-                return true;
-            return catalogService
+            ) {
+                return {
+                    valid: true,
+                };
+            }
+
+            const valid = catalogService
                 .listProductsByCategory(category.id)
                 .some((p) => p.title === normalized);
+
+            return {
+                valid,
+            };
         },
         next: (ctx) => {
             const answer = String(
